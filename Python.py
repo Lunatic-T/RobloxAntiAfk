@@ -1,8 +1,41 @@
+import subprocess
+import sys
+
+def install_if_missing(import_name, pip_name=None):
+    pip_name = pip_name or import_name
+    try:
+        __import__(import_name)
+    except ImportError:
+        print(f"[INFO] Installing missing package: {pip_name}")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", pip_name])
+
+# Required packages
+install_if_missing("pygetwindow")
+install_if_missing("pyautogui")
+install_if_missing("psutil")
+install_if_missing("inputs")
+
+# pywin32 covers both win32gui and win32process
+try:
+    import win32gui, win32process
+except ImportError:
+    print("[INFO] Installing pywin32 for win32gui and win32process")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pywin32"])
+
+# tkinter is built-in; warn if not found
+try:
+    import tkinter as tk
+except ImportError:
+    print("[WARNING] tkinter is not installed. You may need to reinstall Python with the Tcl/Tk option.")
+
+# Rest of your imports (safe now)
 import pygetwindow as gw
 import win32gui
 import time
 import threading
 import pyautogui
+import subprocess
+import sys
 import psutil
 import win32process
 import tkinter as tk
